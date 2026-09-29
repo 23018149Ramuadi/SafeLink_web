@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="theme-color" content="#5424a6">
+        <title>SafeLink | Your safety connection</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    </head>
+    <body>
+<div id="auth" class="auth-wrap">
+    <div class="auth-art">
+        <div class="brand big">
+            <span class="brand-icon">✦</span> SafeLink</div>
+            <div class="art-content">
+                <span class="eyebrow">YOUR SAFETY COMPANION</span>
+                <h1>Stay connected.<br>Feel protected.</h1>
+                <p>A personal safety space to organise your trusted circle and quickly share where you are.</p>
+                <div class="art-bubble">✧ &nbsp;Your safety matters, every day.</div>
+            </div>
+            <div class="art-footer">Designed for everyday peace of mind.</div>
+        </div>
+        <div class="auth-card">
+            <div class="mobile-brand brand">
+                <span class="brand-icon">✦</span> SafeLink</div>
+                <div class="auth-form">
+                    <span class="eyebrow purple">WELCOME TO SAFELINK</span>
+                    <h2 id="auth-title">Welcome back</h2>
+                    <p class="sub" id="auth-sub">Sign in to your personal safety space.</p>
+                    <form id="auth-form">
+                        <div id="name-field" hidden>
+                            <label>Full name</label>
+                            <input id="fullname" autocomplete="name" placeholder="Enter your full name">
+                        </div>
+                        <label>Email address</label>
+                        <input id="email" type="email" required autocomplete="email" placeholder="you@example.com">
+                        <label>Password</label>
+                        <div class="password-row">
+                            <input id="password" type="password" minlength="6" required autocomplete="current-password" placeholder="Enter your password">
+                            <button type="button" class="peek" id="peek">Show</button>
+                        </div>
+                        <p class="form-error" id="auth-error" role="alert"></p>
+                        <button class="btn primary full" id="auth-submit">Sign in →</button>
+                    </form>
+                    <p class="auth-switch">
+                        <span id="switch-text">New to SafeLink?</span> 
+                        <button class="linkbtn" id="switch-auth">Create an account</button>
+                    </p><div class="auth-note">🔒 Your information stays in this browser on this version.</div>
+                </div>
+            </div>
+        </div>
+<div id="app" hidden>
+    <aside class="sidebar">
+        <a class="brand" href="#dashboard"><span class="brand-icon">✦</span> SafeLink</a>
+        <div class="side-label">WORKSPACE</div>
+        <nav id="nav">
+            <button data-page="dashboard" class="navitem active"><span>▦</span> Overview</button>
+            <button data-page="contacts" class="navitem"><span>♧</span> Trusted contacts</button>
+            <button data-page="history" class="navitem"><span>◷</span> SOS activity</button>
+            <button data-page="profile" class="navitem"><span>♙</span> My profile</button>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="help-card"><span>✦ HERE FOR YOU</span><strong>Need urgent help?</strong>
+                <p>Call emergency services directly.</p>
+                <a href="tel:112">Call 112 ↗</a>
+            </div>
+            <button class="navitem" id="logout"><span>↪</span> Sign out</button>
+        </div>
+    </aside>
+    <div class="main-shell">
+        <header class="topbar">
+            <button id="menu" aria-label="Toggle menu">☰</button>
+            <span id="breadcrumb">Overview</span>
+            <div class="top-right">
+                <span class="online-dot"></span> Safety space <span class="avatar" id="avatar">S</span>
+            </div>
+        </header>
+        <main class="content">
+<section id="page-dashboard" class="page">
+    <div class="heading">
+        <div>
+            <span class="eyebrow purple">YOUR SAFETY DASHBOARD</span>
+            <h1>Good to see you, <span id="hello">there</span> 👋</h1>
+            <p>Stay connected to the people who matter most.</p>
+        </div>
+        <span class="date" id="today"></span>
+    </div>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-icon purple-icon">♧</div>
+            <div><span>Trusted contacts</span><strong id="contact-count">0 <small>/ 2</small></strong><p>Your personal safety circle</p>
+            </div>
+        </div>
+        <div class="stat"><div class="stat-icon red-icon">✚</div>
+        <div>
+            <span>SOS status</span><strong id="sos-stat">Inactive</strong>
+            <p id="sos-stat-sub">Ready when you need it</p>
+        </div>
+    </div>
+    <div class="stat">
+        <div class="stat-icon green-icon">◎</div>
+        <div>
+            <span>Location</span><strong id="location-stat">Not shared</strong>
+            <p>GPS permission required</p>
+        </div>
+    </div>
+</div>
+<div class="dash-grid">
+    <section class="panel sos-panel">
+        <div class="panel-heading">
+            <div>
+                <span class="eyebrow purple">EMERGENCY ASSISTANCE</span>
+                <h2>One tap for support</h2>
+                <p>Activate SOS to request your location and prepare an emergency message.</p>
+            </div>
+            <span id="status-pill" class="pill">● INACTIVE</span>
+        </div>
+            <div class="sos-center">
+                <div class="sos-rings">
+                    <button id="activate" class="sos-circle"><span>✚</span><strong>SOS</strong><small>PRESS TO ACTIVATE</small></button>
+                </div>
+                <button id="deactivate" class="btn danger-outline" hidden>Deactivate SOS</button>
+                <p id="sos-message" class="sos-help" role="status">Your browser will request permission to access your location.</p>
+            </div>
+            <div id="location-box" hidden><div class="map-top">
+                <strong>📍 Current location</strong>
+                <span id="accuracy"></span>
+            </div>
+            <div id="map">
+
+
+            </div>
+            <div id="map-error" class="muted" hidden>Map tiles unavailable. Your coordinates and location link are still shown.</div>
+            <p class="coordinates" id="coords"></p>
+            <div class="actions">
+                <a id="maps-link" class="btn light" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+                <button id="share" class="btn primary">Share location ↗</button>
+            </div>
+            <p class="tiny">Choose a contact in the sharing window to send the message. Sending is not automatic.</p>
+        </div>
+    </section>
+    <div class="right-col"><section class="panel">
+        <div class="panel-heading compact">
+            <div><span class="eyebrow purple">YOUR PEOPLE</span><h2>Trusted circle</h2></div>
+            <button class="text-action" data-go="contacts">Manage →</button>
+        </div>
+        <div id="dash-contacts" class="contact-preview">
+
+        </div>
+    </section>
+    <section class="panel quick-help">
+    <span class="eyebrow purple">IMPORTANT NUMBERS</span>
+    <h2>Emergency support</h2>
+    <a href="tel:112"><span>📞 Mobile emergency</span><strong>112 ↗</strong></a>
+    <a href="tel:10111"><span>🚓 SAPS Police</span><strong>10111 ↗</strong></a>
+    <a href="tel:0800428428"><span>♡ GBV Command Centre</span><strong>0800 428 428 ↗</strong></a>
+    <p class="tiny">SafeLink does not automatically contact emergency services.</p>
+</section>
+</div>
+</div>
+</section>
+<section id="page-contacts" class="page" hidden>
+    <div class="heading">
+        <div>
+            <span class="eyebrow purple">YOUR SAFETY CIRCLE</span>
+            <h1>Trusted contacts</h1>
+            <p>Save up to two people you can quickly reach in an emergency.</p>
+        </div>
+        <button class="btn primary" id="add-contact">+ Add contact</button>
+    </div>
+    <div class="panel">
+        <div id="contact-list"></div>
+        <p class="tiny">Contacts are saved in this browser. You can share your emergency message using your phone's sharing options.</p>
+    </div>
+</section>
+
+<section id="page-history" class="page" hidden>
+    <div class="heading">
+        <div>
+            <span class="eyebrow purple">YOUR ACTIVITY</span>
+            <h1>SOS activity</h1>
+            <p>A record of SOS sessions started on this device.</p>
+        </div>
+    </div>
+    <div class="panel">
+        <div id="history-list">
+
+        </div>
+    </div>
+</section>
+
+
+<section id="page-profile" class="page" hidden>
+    <div class="heading">
+        <div>
+            <span class="eyebrow purple">ACCOUNT SETTINGS</span>
+            <h1>My profile</h1>
+            <p>Keep your personal information up to date.</p>
+        </div>
+    </div>
+    <div class="panel profile-panel"><div class="profile-head">
+        <div class="avatar large" id="profile-avatar">S</div>
+        <div><h2 id="profile-name"></h2><p id="profile-email"></p></div>
+    </div>
+    <form id="profile-form">
+        <label>Full name</label>
+        <input id="profile-input" required>
+        <label>Email address</label>
+        <input id="profile-email-input" type="email" required>
+        <button class="btn primary">Save changes</button>
+    </form>
+</div>
+</section>
+
+</main>
+</div>
+</div>
+
+<div id="modal" class="modal-backdrop" hidden>
+    <div class="modal">
+        <div class="modal-title">
+            <h2 id="modal-heading">Add trusted contact</h2>
+            <button id="close-modal" aria-label="Close">✕</button>
+        </div>
+        <p>Choose someone you trust and can reach quickly.</p>
+        <form id="contact-form">
+            <input type="hidden" id="edit-id">
+            <label>Full name</label>
+            <input id="contact-name" required placeholder="e.g. Jane M">
+            <label>Relationship</label>
+            <select id="contact-relation">
+                <option>Family</option>
+                <option>Friend</option>
+                <option>Partner</option>
+                <option>Guardian</option>
+                <option>Other</option>
+            </select>
+            <label>Phone number</label>
+            <input id="contact-phone" type="tel" required pattern="[+0-9 ()-]{7,20}" placeholder="e.g. 071 123 4567">
+            <div class="modal-actions">
+                <button class="btn light" type="button" id="cancel-modal">Cancel</button>
+                <button class="btn primary">Save contact</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
